@@ -4,10 +4,15 @@ import com.pluralsight.Models.Category;
 import com.pluralsight.Persistance.DataManager;
 
 import java.sql.SQLException;
+import java.util.List;
 
-public class SakilaConsoleAPp {
+public class SakilaConsoleApp {
 
     private DataManager dataManager;
+
+    public SakilaConsoleApp(DataManager dataManager){
+        this.dataManager = dataManager;
+    }
 
     public void start(){
         String prompt = """
@@ -16,11 +21,11 @@ public class SakilaConsoleAPp {
                     2 - List all Films
                     3 - List Filmas by Category
                     0 - Quit 
-                Command: """;
+                Command """;
 
         int choice = -1;
 
-        while (choice ! = 0 ){
+        while (choice != 0 ){
             choice = InputCollector.promptForInt(prompt);
             
             switch (choice){
@@ -30,9 +35,14 @@ public class SakilaConsoleAPp {
         }
     }
 
+
+
     private void listAllCategories() {
-        try{List<Category> categories = dataManager.getAllCategories();
+        try{
+
+            List<Category> categories = dataManager.getAllCategories();
             InputCollector.displayList(categories);
+
         }catch(SQLException e){
             System.out.println("Error: " +  e.getMessage());
         }

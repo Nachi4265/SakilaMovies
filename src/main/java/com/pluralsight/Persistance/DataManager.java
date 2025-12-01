@@ -3,6 +3,7 @@ package com.pluralsight.Persistance;
 import com.pluralsight.Models.Category;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +13,13 @@ import java.util.List;
 
 public class DataManager {
 
-    private BasicDataSource ds;
+    private BasicDataSource dataSource1;
 
-    private static List<Category> getAllCategories() throws SQLException {
+    public DataManager(BasicDataSource dataSource1){
+        this.dataSource1 = dataSource1;
+    }
+
+    public List<Category> getAllCategories() throws SQLException {
 
         List<Category> categories = new ArrayList<>();
 
@@ -23,9 +28,8 @@ public class DataManager {
                     category_id,
                     name
                     from category""";
-
         try(
-                Connection connection = this.ds.getConnection();
+                Connection connection = this.dataSource1.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet results = statement.executeQuery();
         ){
@@ -35,15 +39,8 @@ public class DataManager {
                 Category c = new Category(id, name);
                 categories.add(c);
             }
-
-
-
         }
-
         return categories;
     }
 
-    public DataManager(BasicDataSource ds) {
-        this.ds = ds;
-    }
 }

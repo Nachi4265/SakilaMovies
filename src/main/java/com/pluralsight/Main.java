@@ -1,64 +1,50 @@
 package com.pluralsight;
 
-import com.pluralsight.Models.Category;
-import com.pluralsight.UserInterface.InputCollector;
-import com.pluralsight.UserInterface.SakilaConsoleAPp;
+import com.pluralsight.Persistance.DataManager;
+import com.pluralsight.UserInterface.SakilaConsoleApp;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
+
     public static void main(String[] args)  {
 
-
-        if(!ensureArgs){
-            return;
-        }
+        if (!ensureArgs(args)) { return; }
 
         try{
+            BasicDataSource dataSource = getDataSource(args);
 
+            DataManager dataManager = new DataManager(dataSource);
 
+            SakilaConsoleApp app = new SakilaConsoleApp(dataManager);
 
-        }catch (Exception e ){
-            System.out.println("There was a SQL exception: " + e.getMessage());
-        }
+            app.start();
 
-        BasicDataSource dataSource =getDataSource(args);
-
-        SakilaConsoleAPp app = new SakilaConsoleAPp();
-        app.start();
-
-
-
-        try{ List<Category> categories = getAllCategories(basicDataSource);
-             InputCollector.displayList(categories);
-
-        }catch (SQLException e ){
-            System.out.println("There was a SQL Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("There was a SQL exception: "+ e.getMessage());
         }
 
     }
 
-    private boolean ensureArgs(String[] args){
+    private static boolean ensureArgs(String[] args){
 
-
+        if(args.length < 3){
+            System.out.println("You need to provide a username, password, and URL when running this command.");
+            System.out.println("For example:");
+            System.out.println("Main.exe myUsername myPassword myURL");
+            return false;
+        }
+        return true;
     }
 
     private static BasicDataSource getDataSource(String userName , String password , String URL) throws SQLException {
 
-        try(BasicDataSource basicDataSource = new BasicDataSource()){
+        BasicDataSource basicDataSource = new BasicDataSource();
             basicDataSource.setUrl(URL);
             basicDataSource.setUsername(userName);
             basicDataSource.setPassword(password);
             return basicDataSource;
-        }
-
-
     }
 
     private static BasicDataSource getDataSource(String[]args) throws SQLException {
