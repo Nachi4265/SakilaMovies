@@ -1,24 +1,26 @@
 package com.pluralsight.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Film {
 
     private int ID;
     private String Title;
-    private int length;
     private String rating ;
+    private List<Actor> actors;
 
-    public Film(int ID, String title, int length, String rating) {
+    public Film(int ID, String title, String rating) {
         this.ID = ID;
-        Title = title;
-        this.length = length;
+        this.Title = title;
         this.rating = rating;
+        this.actors = new ArrayList<>();
     }
 
-
-    public Film(String firstName, String lastName, String filmID, String title, String rating) {
-
-
+    public void addActor(Actor actor){
+        this.actors.add(actor);
     }
+
 
     public int getID() {
         return ID;
@@ -36,14 +38,6 @@ public class Film {
         Title = title;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     public String getRating() {
         return rating;
     }
@@ -54,7 +48,7 @@ public class Film {
 
     @Override
     public String toString() {
-        return Title;
+        return String.format("------------------------\n ID: %-10d \n Movie Title: %-5s \n  Rating: %-40s \n " , ID , Title, rating);
     }
 
 

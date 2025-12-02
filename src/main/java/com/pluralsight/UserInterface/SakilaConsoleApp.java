@@ -50,20 +50,17 @@ public class SakilaConsoleApp {
     private void listActorsByName() {
         try{
 
-           String lastName = ConsoleHelper.promptForString("What is the last name of the actor");
+            String lastName = ConsoleHelper.promptForString("What is the last name of the actor");
             List<Actor> actors = dataManager.getActorByName(lastName);
             ConsoleHelper.displayList(actors);
 
-            System.out.println(" Enter a first name and a last name of an actor they want to see the movies of");
+            System.out.println(" Enter an Actor ID of an actor you want to see the movies of");
             System.out.println();
-            String actFirstName = ConsoleHelper.promptForString("Enter first name here ");
-            String actLastName = ConsoleHelper.promptForString("Enter first name here ");
-            List<Film>films = dataManager.getFilmWithActor(actFirstName,actLastName);
+            int actorID = ConsoleHelper.promptForInt("Enter ID Here ");
+
+            List<Film>films = dataManager.getFilmByActorID(actorID);
             ConsoleHelper.displayList(films);
-
-
-
-
+            
         }catch(SQLException e){
             System.out.println("Error: " +  e.getMessage());
             e.printStackTrace();

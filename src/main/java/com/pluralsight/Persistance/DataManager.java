@@ -71,28 +71,28 @@ public class DataManager {
 
     }
 
-    public List<Film> getFilmWithActor(String actFirstName, String actLastName) throws SQLException {
+
+    public List<Film> getFilmByActorID(int actorID) throws SQLException {
         List<Film> films = new ArrayList<>();
 
         try(Connection connection = dataSource1.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT actor.first_name,actor.last_name,film.film_id,film.title,film.rating FROM film " +
-                    " INNER JOIN film_actor ON film.film_id = film_actor.film_id INNER JOIN actor ON film_actor.actor_id = actor.actor_id WHERE actor.first_name = ? AND actor.last_name = ?")
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    //todo fix SQL statment
+                    "SELECT film.film_id, title, length, rating FROM film join film_actor on film.film_id = film_actor.film_id where film_actor.actor_id = ? ")
         ){
-            preparedStatement.setString(1,actFirstName);
-            preparedStatement.setString(2,actLastName);
+            preparedStatement.setInt(1,actorID);
+
 
             try(ResultSet result = preparedStatement.executeQuery()){
 
                 while (result.next()) {
 
-                    String firstName = result.getString("first_name");
-                    String lastName = result.getString("last_name");
-                    String filmID = result.getString("film_id");
+                    int filmID = result.getInt("film_id");
                     String title = result.getString("title");
                     String rating = result.getString("rating");
 
                     //making the actor
-                    Film film = new Film(firstName,lastName,filmID,title,rating);
+                    Film film = new Film(filmID,title,rating);
                     films.add(film);
                 }
             }
