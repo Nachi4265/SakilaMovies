@@ -85,19 +85,24 @@ public class DataManager {
 
             try(ResultSet result = preparedStatement.executeQuery()){
 
-                while (result.next()) {
+                if(result.next()){
+                    System.out.println("Your matches are: \n");
 
-                    int filmID = result.getInt("film_id");
-                    String title = result.getString("title");
-                    String rating = result.getString("rating");
+                    do{
+                        int filmID = result.getInt("film_id");
+                        String title = result.getString("title");
+                        String rating = result.getString("rating");
 
-                    //making the actor
-                    Film film = new Film(filmID,title,rating);
-                    films.add(film);
+                        //making the actor
+                        Film film = new Film(filmID,title,rating);
+                        films.add(film);}
+
+                    while(result.next());
+                }else {
+                    System.out.println("no matches!");
                 }
             }
         }
         return films;
     }
-
 }

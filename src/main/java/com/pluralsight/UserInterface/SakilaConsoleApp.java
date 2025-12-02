@@ -60,7 +60,7 @@ public class SakilaConsoleApp {
 
             List<Film>films = dataManager.getFilmByActorID(actorID);
             ConsoleHelper.displayList(films);
-            
+
         }catch(SQLException e){
             System.out.println("Error: " +  e.getMessage());
             e.printStackTrace();
