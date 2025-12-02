@@ -1,5 +1,6 @@
 package com.pluralsight.Persistance;
 
+import com.pluralsight.Models.Actor;
 import com.pluralsight.Models.Category;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -41,6 +42,33 @@ public class DataManager {
             }
         }
         return categories;
+    }
+
+    public List<Actor> getActorByName(String actorLastName)throws SQLException{
+        List<Actor> actors = new ArrayList<>();
+
+        try(Connection connection = dataSource1.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT actor_id, first_name, last_name FROM actor where last_name like %?% ")
+        ){
+            preparedStatement.setString(1,actorLastName);
+
+            try(ResultSet result = preparedStatement.executeQuery()){
+
+                while (result.next()) {
+
+                    int FilmID = result.getInt("film_id");
+                    int ActorID = result.getInt("actor_id");
+                    String firstName = result.getString("first_name");
+                    String lastName = result.getString("last_name");
+
+                    //making the actor
+                    Actor actor = new Actor(ActorID ,firstName,lastName);
+                    actors.add(actor);
+                }
+            }
+        }
+        return actors;
+
     }
 
 }
