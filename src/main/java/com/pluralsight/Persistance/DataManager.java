@@ -2,6 +2,7 @@ package com.pluralsight.Persistance;
 
 import com.pluralsight.Models.Actor;
 import com.pluralsight.Models.Category;
+import com.pluralsight.Models.Film;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.xml.crypto.Data;
@@ -48,7 +49,7 @@ public class DataManager {
         List<Actor> actors = new ArrayList<>();
 
         try(Connection connection = dataSource1.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT actor_id, first_name, last_name FROM actor where last_name like %?% ")
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT actor_id, first_name, last_name FROM actor where last_name like ? ")
         ){
             preparedStatement.setString(1,actorLastName);
 
@@ -56,7 +57,6 @@ public class DataManager {
 
                 while (result.next()) {
 
-                    int FilmID = result.getInt("film_id");
                     int ActorID = result.getInt("actor_id");
                     String firstName = result.getString("first_name");
                     String lastName = result.getString("last_name");
@@ -69,6 +69,35 @@ public class DataManager {
         }
         return actors;
 
+    }
+
+    public List<Film> getFilmWithActor(String actFirstName, String actLastName) throws SQLException {
+        List<Film> films = new ArrayList<>();
+
+        try(Connection connection = dataSource1.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT actor.first_name,actor.last_name,film.film_id,film.title,film.rating FROM film " +
+                    " INNER JOIN film_actor ON film.film_id = film_actor.film_id INNER JOIN actor ON film_actor.actor_id = actor.actor_id WHERE actor.first_name = ? AND actor.last_name = ?")
+        ){
+            preparedStatement.setString(1,actFirstName);
+            preparedStatement.setString(2,actLastName);
+
+            try(ResultSet result = preparedStatement.executeQuery()){
+
+                while (result.next()) {
+
+                    String firstName = result.getString("first_name");
+                    String lastName = result.getString("last_name");
+                    String filmID = result.getString("film_id");
+                    String title = result.getString("title");
+                    String rating = result.getString("rating");
+
+                    //making the actor
+                    Film film = new Film(firstName,lastName,filmID,title,rating);
+                    films.add(film);
+                }
+            }
+        }
+        return films;
     }
 
 }

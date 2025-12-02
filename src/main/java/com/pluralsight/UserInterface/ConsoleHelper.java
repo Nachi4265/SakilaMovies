@@ -1,10 +1,9 @@
 package com.pluralsight.UserInterface;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
-public class InputCollector {
+public class ConsoleHelper {
 
     //This is what will collect all our input
     private static final Scanner scanner = new Scanner(System.in);

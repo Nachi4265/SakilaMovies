@@ -2,6 +2,7 @@ package com.pluralsight.UserInterface;
 
 import com.pluralsight.Models.Actor;
 import com.pluralsight.Models.Category;
+import com.pluralsight.Models.Film;
 import com.pluralsight.Persistance.DataManager;
 
 import java.sql.SQLException;
@@ -28,11 +29,11 @@ public class SakilaConsoleApp {
         int choice = -1;
 
         while (choice != 0 ){
-            choice = InputCollector.promptForInt(prompt);
+            choice = ConsoleHelper.promptForInt(prompt);
             
             switch (choice){
                 case 1 : listAllCategories();
-                break;
+                    break;
                 case 2 : listAllFilms();
                     break;
                 case 3 : listAllFilmsByCategory();
@@ -49,12 +50,23 @@ public class SakilaConsoleApp {
     private void listActorsByName() {
         try{
 
-           String lastName = InputCollector.promptForString("What is the last name of the actor");
+           String lastName = ConsoleHelper.promptForString("What is the last name of the actor");
             List<Actor> actors = dataManager.getActorByName(lastName);
-            InputCollector.displayList(actors);
+            ConsoleHelper.displayList(actors);
+
+            System.out.println(" Enter a first name and a last name of an actor they want to see the movies of");
+            System.out.println();
+            String actFirstName = ConsoleHelper.promptForString("Enter first name here ");
+            String actLastName = ConsoleHelper.promptForString("Enter first name here ");
+            List<Film>films = dataManager.getFilmWithActor(actFirstName,actLastName);
+            ConsoleHelper.displayList(films);
+
+
+
 
         }catch(SQLException e){
             System.out.println("Error: " +  e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -69,7 +81,7 @@ public class SakilaConsoleApp {
         try{
 
             List<Category> categories = dataManager.getAllCategories();
-            InputCollector.displayList(categories);
+            ConsoleHelper.displayList(categories);
 
         }catch(SQLException e){
             System.out.println("Error: " +  e.getMessage());

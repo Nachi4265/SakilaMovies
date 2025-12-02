@@ -1,17 +1,23 @@
 package com.pluralsight.Models;
 
-public class film {
+public class Film {
 
     private int ID;
     private String Title;
     private int length;
     private String rating ;
 
-    public film(int ID, String title, int length, String rating) {
+    public Film(int ID, String title, int length, String rating) {
         this.ID = ID;
         Title = title;
         this.length = length;
         this.rating = rating;
+    }
+
+
+    public Film(String firstName, String lastName, String filmID, String title, String rating) {
+
+
     }
 
     public int getID() {
@@ -48,11 +54,11 @@ public class film {
 
     @Override
     public String toString() {
-        return "film{" +
-                "ID=" + ID +
-                ", Title='" + Title + '\'' +
-                ", length=" + length +
-                ", rating='" + rating + '\'' +
-                '}';
+        return Title;
     }
+
+
+
+
+
 }
